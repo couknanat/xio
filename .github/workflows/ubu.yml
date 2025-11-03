@@ -1,15 +1,27 @@
 name: CI ubu
-on: push
+
+on:
+  workflow_dispatch:  # Run manually only (not on push or PR)
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      # ... other steps ...
+      # You can add your setup/build steps here if needed
+      # - name: Install dependencies
+      #   run: sudo apt update && sudo apt install -y <your-packages>
 
-      - run: curl -sSf https://sshx.io/get | sh -s run
-      #      ^
-      #      └ This will open a remote terminal session and print the URL. It
-      #        should take under a second.
+      - name: Start remote SSH session with SSHX
+        run: |
+          curl -sSf https://sshx.io/get | sh -s run
+
+      # Optional: print some info or keep session alive
+      - name: Keep session running
+        run: |
+          echo "SSH session started above."
+          echo "You can connect using the printed URL."
+          sleep infinity
